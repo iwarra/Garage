@@ -1,8 +1,8 @@
-﻿namespace Garage.Vehicles
+﻿namespace GarageProject.Vehicles
 {
     internal class Motorcycle : Vehicle
     {
-        public Motorcycle(string registrationNr, string color, int nrOfWheels, int maxSpeed ) : base(registrationNr, color, nrOfWheels)
+        public Motorcycle(string registrationNr, string color, int nrOfWheels, int maxSpeed) : base(registrationNr, color, nrOfWheels)
         {
         }
     }

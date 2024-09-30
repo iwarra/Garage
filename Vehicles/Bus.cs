@@ -1,4 +1,4 @@
-﻿namespace Garage.Vehicles
+﻿namespace GarageProject.Vehicles
 {
     internal class Bus : Vehicle
     {

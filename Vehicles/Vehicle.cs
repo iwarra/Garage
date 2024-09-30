@@ -1,6 +1,6 @@
-﻿namespace Garage.Vehicles
+﻿namespace GarageProject.Vehicles
 {
-    internal class Vehicle : IVehicle
+    public class Vehicle : IVehicle
     {
         public string RegistrationNr { get; set; }
         public string Color { get; set; }
