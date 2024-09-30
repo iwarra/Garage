@@ -26,10 +26,10 @@ namespace GarageProject
                        AddVehicle();
                         break;
                     case MenuHelpers.Remove:
-                        // RemoveVehicle();
+                        RemoveVehicle();
                         break;
                     case MenuHelpers.Print:
-                        // PrintAllVehicles();
+                        PrintAllVehicles();
                         break;
                     case MenuHelpers.AddGarage:
                         AddGarage(allGarages);
@@ -47,7 +47,6 @@ namespace GarageProject
              void AddVehicle()
              {
                 Vehicle VehicleToAdd = CreateVehicle();
-                //Let user pick a garage from a list?
                 var (isMatched, selectedGarage) = GetGarage();
                 if (isMatched && selectedGarage != null)
                 {
@@ -56,19 +55,18 @@ namespace GarageProject
                 else Console.WriteLine("Sorry, we couldn't find the garage. Please try again.");
              }
 
-            //Pseudo code
-            //static void RemoveVehicle()
-            //{
-            //    //Let user pick a garage from a list?
-            //    Garage<Vehicle> GarageToRemoveFrom = GetGarage();
-            //    handler.RemoveVehicle(GarageToRemoveFrom);
-            //}
 
-            //static void PrintAllVehicles()
-            //{
-            //    Garage<Vehicle> SelectedGarage = GetGarage();
-            //    handler.ListAllVehicles(SelectedGarage);
-            //}
+            void RemoveVehicle()
+            {
+                var (isMatched, selectedGarage) = GetGarage();
+                if(isMatched && selectedGarage != null) handler.RemoveVehicle(selectedGarage);  
+            }
+
+            void PrintAllVehicles()
+            {
+                var (isMatched, selectedGarage) = GetGarage();
+                if(isMatched && selectedGarage != null) handler.ListAllVehicles(selectedGarage);
+            }
 
             static void AddGarage(List<Garage<Vehicle>> allGarages)
             {
@@ -95,10 +93,9 @@ namespace GarageProject
         {
             bool isMatched = false;
             string input = Util.AskForString("Garage name");
-            Console.WriteLine(allGarages.Count);
+
             foreach (var garage in allGarages)
             {
-                Console.WriteLine(garage.Name);
                 if (garage.Name.ToLower() == input.ToLower()) 
                 {
                     isMatched = true;
