@@ -6,6 +6,8 @@ namespace GarageProject
 {
     internal class Program
     {
+        public static List<Garage<Vehicle>> allGarages = new List<Garage<Vehicle>>();
+
         static void Main()
         {
             bool isRunning = true;
@@ -21,7 +23,7 @@ namespace GarageProject
                 switch (input)
                 {
                     case MenuHelpers.Add:
-                       // AddVehicle();
+                       AddVehicle();
                         break;
                     case MenuHelpers.Remove:
                         // RemoveVehicle();
@@ -30,7 +32,7 @@ namespace GarageProject
                         // PrintAllVehicles();
                         break;
                     case MenuHelpers.AddGarage:
-                        // AddGarage();
+                        AddGarage(allGarages);
                         break;
                     case MenuHelpers.Quit:
                         isRunning = false;
@@ -41,16 +43,20 @@ namespace GarageProject
             }
             while (isRunning);
 
+            
+             void AddVehicle()
+             {
+                Vehicle VehicleToAdd = CreateVehicle();
+                //Let user pick a garage from a list?
+                var (isMatched, selectedGarage) = GetGarage();
+                if (isMatched && selectedGarage != null)
+                {
+                    handler.AddVehicle(VehicleToAdd, selectedGarage);
+                }
+                else Console.WriteLine("Sorry, we couldn't find the garage. Please try again.");
+             }
+
             //Pseudo code
-            //static void AddVehicle()
-            //{
-            //   Vehicle VehicleToAdd = CreateVehicle();
-            //   //Let user pick a garage from a list?
-            //   Garage<Vehicle> GarageToAddInto = GetGarage();
-
-            //   handler.AddVehicle(VehicleToAdd, GarageToAddInto); 
-            //}
-
             //static void RemoveVehicle()
             //{
             //    //Let user pick a garage from a list?
@@ -64,15 +70,43 @@ namespace GarageProject
             //    handler.ListAllVehicles(SelectedGarage);
             //}
 
-            //static void AddGarage()
-            //{
-            //    string garageName = Util.AskForString("Please input the garage name: ");
-            //    uint capacity = Util.AskForUInt("Please input the garage capacity: ");
+            static void AddGarage(List<Garage<Vehicle>> allGarages)
+            {
+                string garageName = Util.AskForString("Garage name");
+                uint capacity = Util.AskForUInt("Garage capacity");
 
-            //    Garage<Vehicle> garageToAdd = new Garage<Vehicle>(capacity, garageName);
-            //    allGarages.Add(garageToAdd);
-            //}
+                Garage<Vehicle> garageToAdd = new Garage<Vehicle>(capacity, garageName);
+                allGarages.Add(garageToAdd);
+                Console.WriteLine(allGarages.Count);
+            }
 
         }
+
+        private static Vehicle CreateVehicle()
+        {
+            string registration = Util.AskForString("Vehicle registration");
+            string color = Util.AskForString("Vehicle color");
+            uint nrOfWheels = Util.AskForUInt("Number of wheels");
+
+            return new Vehicle(registration, color, nrOfWheels);
+        }
+
+        private static (bool, Garage<Vehicle>?) GetGarage()
+        {
+            bool isMatched = false;
+            string input = Util.AskForString("Garage name");
+            Console.WriteLine(allGarages.Count);
+            foreach (var garage in allGarages)
+            {
+                Console.WriteLine(garage.Name);
+                if (garage.Name.ToLower() == input.ToLower()) 
+                {
+                    isMatched = true;
+                    return (isMatched, garage);
+                };
+            }
+            return (isMatched, null);   
+        }
+
     }
 }
