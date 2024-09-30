@@ -2,7 +2,7 @@
 {
     internal class Car : Vehicle
     {
-        public Car(string registrationNr, string color, int nrOfWheels, string fuelType) : base(registrationNr, color, nrOfWheels)
+        public Car(string registrationNr, string color, uint nrOfWheels, string fuelType) : base(registrationNr, color, nrOfWheels)
         {
         }
     }
