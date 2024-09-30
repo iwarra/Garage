@@ -1,4 +1,4 @@
-﻿namespace Garage.UI
+﻿namespace GarageProject.UI
 {
     internal interface IUI
     {
