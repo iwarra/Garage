@@ -25,7 +25,7 @@ namespace GarageProject.Garages
         {
             foreach (var vehicle in garage)
             {
-                Console.WriteLine($"{vehicle.GetType()} with the registration: {vehicle.RegistrationNr} in color: {vehicle.Color}"); 
+                Console.WriteLine($"{vehicle.GetType().Name} with the registration: {vehicle.RegistrationNr} in color: {vehicle.Color}"); 
             }
         }
     }
