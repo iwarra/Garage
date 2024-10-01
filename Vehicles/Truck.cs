@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GarageProject.Vehicles
+﻿namespace GarageProject.Vehicles
 {
     internal class Truck : Vehicle
     {
-        public Truck(string registrationNr, string color, uint nrOfWheels, bool isLoaded ) : base(registrationNr, color, nrOfWheels)
+        public Truck(string registrationNr, string color, uint nrOfWheels, uint storageCapacity ) : base(registrationNr, color, nrOfWheels)
         {
         }
     }
