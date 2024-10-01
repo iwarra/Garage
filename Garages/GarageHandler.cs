@@ -23,6 +23,7 @@ namespace GarageProject.Garages
 
         public void ListAllVehicles(Garage<Vehicle> garage)
         {
+            Console.WriteLine("\n");
             foreach (var vehicle in garage)
             {
                 Console.WriteLine($"{vehicle.GetType().Name} with the registration: {vehicle.RegistrationNr} in color: {vehicle.Color}"); 
