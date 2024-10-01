@@ -6,6 +6,7 @@ namespace GarageProject
 {
     internal class Program
     {
+        //List of all garages as there can be multiple
         public static List<Garage<Vehicle>> allGarages = new List<Garage<Vehicle>>();
 
         static void Main()
@@ -18,18 +19,26 @@ namespace GarageProject
             do 
             {
                 MenuHelpers.ShowMainMenu();
-                string input = ConsoleUI.GetInput().ToUpper();
+                string input = ui.GetInput().ToUpper();
 
                 switch (input)
                 {
+                    case MenuHelpers.Print:
+                        PrintAllVehicles();
+                        break;
+                    //Add printing by type and quantity
+                    case MenuHelpers.PrintByType:
+                        PrintByType();
+                        break;
                     case MenuHelpers.Add:
                        AddVehicle();
                         break;
                     case MenuHelpers.Remove:
                         RemoveVehicle();
                         break;
-                    case MenuHelpers.Print:
-                        PrintAllVehicles();
+                    //Add search
+                    case MenuHelpers.Search:
+                        SearchVehicles();
                         break;
                     case MenuHelpers.AddGarage:
                         AddGarage(allGarages);
@@ -78,6 +87,24 @@ namespace GarageProject
                 Console.WriteLine(allGarages.Count);
             }
 
+        }
+
+        private static void PrintByType()
+        {
+            string garageName = Util.AskForString("Garage name");
+            //Loop through all vehicles and sort by type
+            //Print total number of each type
+        }
+
+        private static void SearchVehicles()
+        {
+            string garageName = Util.AskForString("Garage name");
+            string registration = Util.AskForString("Vehicle registration");
+            string color = Util.AskForString("Vehicle color");
+            uint nrOfWheels = Util.AskForUInt("Number of wheels");
+
+            //Search for all vehicles in the given garage
+            //If certain value is empty include all?
         }
 
         private static Vehicle CreateVehicle()
