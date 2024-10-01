@@ -107,11 +107,15 @@ namespace GarageProject
 
             void PrintByType()
             {
-                //Show all garages first 
-                PrintAllGarages();
-                string garageName = Util.AskForString("Garage name");
-                //Loop through all vehicles and sort by type
-                //Print total number of each type
+                var (isFound, selectedGarage) = GetGarage();
+                if (isFound) 
+                {
+                    Dictionary<string, int> vehicleTypes = handler.GetVehicleCountByType(selectedGarage);
+                    foreach (var v in vehicleTypes)
+                    {
+                        Console.WriteLine($"{v.Key} total is: {v.Value}");
+                    }
+                } else Console.WriteLine("Please select an existing garage.");
             }
 
             void SearchVehicles()
