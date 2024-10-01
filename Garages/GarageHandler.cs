@@ -29,5 +29,10 @@ namespace GarageProject.Garages
                 Console.WriteLine($"{vehicle.GetType().Name} with the registration: {vehicle.RegistrationNr} in color: {vehicle.Color}"); 
             }
         }
+
+        public Dictionary<string, int> GetVehicleCountByType(Garage<Vehicle> garage)
+        {
+            return garage.CountVehiclesByType();
+        }
     }
 }

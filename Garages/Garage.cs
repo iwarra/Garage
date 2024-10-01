@@ -62,6 +62,14 @@ namespace GarageProject.Garages
             return false;
         }
 
+        internal Dictionary<string, int> CountVehiclesByType()
+        {
+            return vehicles
+                .Where(v => v != null)
+                .GroupBy(v => v.GetType().Name)
+                .ToDictionary(g => g.Key, g => g.Count());
+        }
+
         //Search here ? 
 
         public IEnumerator<T> GetEnumerator()
