@@ -52,7 +52,7 @@ namespace GarageProject
             }
             while (isRunning);
 
-            
+         
              void AddVehicle()
              {
                 Vehicle VehicleToAdd = CreateVehicle();
@@ -71,10 +71,19 @@ namespace GarageProject
                 if(isMatched && selectedGarage != null) handler.RemoveVehicle(selectedGarage);  
             }
 
+
             void PrintAllVehicles()
             {
                 var (isMatched, selectedGarage) = GetGarage();
-                if(isMatched && selectedGarage != null) handler.ListAllVehicles(selectedGarage);
+
+                if (!isMatched || selectedGarage == null)
+                {
+                    Console.WriteLine("Garage not found.");
+                    return;
+                }
+
+                if (selectedGarage.IsEmpty()) Console.WriteLine($"{selectedGarage.Name} garage is empty.");
+                else handler.ListAllVehicles(selectedGarage);
             }
 
             static void AddGarage(List<Garage<Vehicle>> allGarages)
@@ -87,32 +96,44 @@ namespace GarageProject
                 Console.WriteLine(allGarages.Count);
             }
 
-        }
+            void PrintAllGarages()
+            {
+                ConsoleColor originalColor = Console.ForegroundColor;
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("Here is a list of all the garages: ");
+                allGarages.ForEach(g => Console.WriteLine(g.Name));
+                Console.ForegroundColor = originalColor;
+            }
 
-        private static void PrintByType()
-        {
-            string garageName = Util.AskForString("Garage name");
-            //Loop through all vehicles and sort by type
-            //Print total number of each type
-        }
+            void PrintByType()
+            {
+                //Show all garages first 
+                PrintAllGarages();
+                string garageName = Util.AskForString("Garage name");
+                //Loop through all vehicles and sort by type
+                //Print total number of each type
+            }
 
-        private static void SearchVehicles()
-        {
-            string garageName = Util.AskForString("Garage name");
-            string registration = Util.AskForString("Vehicle registration");
-            string color = Util.AskForString("Vehicle color");
-            uint nrOfWheels = Util.AskForUInt("Number of wheels");
+            void SearchVehicles()
+            {
+                PrintAllGarages();
+                string garageName = Util.AskForString("Garage name");
+                string registration = Util.AskForString("Vehicle registration");
+                string color = Util.AskForString("Vehicle color");
+                uint nrOfWheels = Util.AskForUInt("Number of wheels");
 
-            //Search for all vehicles in the given garage
-            //If certain value is empty include all?
-        }
+                //Search for all vehicles in the given garage
+                //If certain value is empty include all?
+            }
 
-        private static Vehicle CreateVehicle()
-        {
-            ConsoleColor originalColor = Console.ForegroundColor;
-            bool isCorrect = false;
-            //Print out types and ask for which one it should be
-            List<string> vehicleTypes = new List<string>
+            //ToDo: Refactor the whole thing
+            Vehicle CreateVehicle()
+            {
+                ConsoleColor originalColor = Console.ForegroundColor;
+                bool isCorrect = false;
+                //Print out types and ask for which one it should be
+                //ToDo: Refactor the vehicle types logic
+                List<string> vehicleTypes = new List<string>
             {
                 "Car",
                 "Bus",
@@ -120,73 +141,94 @@ namespace GarageProject
                 "RV",
                 "Truck"
             };
-            //Print this part in different color 
-            Console.ForegroundColor = ConsoleColor.Blue;
-            Console.WriteLine("Here are all the vehicle types: ");
-            vehicleTypes.ForEach(v => Console.WriteLine(v));
-            Console.ForegroundColor = originalColor;
+                //Print this part in different color 
+                Console.ForegroundColor = ConsoleColor.Blue;
+                Console.WriteLine("Here are all the vehicle types: ");
+                vehicleTypes.ForEach(v => Console.WriteLine(v));
+                Console.ForegroundColor = originalColor;
 
-            while (!isCorrect)
-            {
-                string vehicleType = Util.AskForString("Vehicle type");
-                //Ask for all 
-                string registration = Util.AskForString("Vehicle registration");
-                string color = Util.AskForString("Vehicle color");
-                uint nrOfWheels = Util.AskForUInt("Number of wheels");
-                //Ask for specific types
-                if (vehicleType.ToLower() == "car")
+                while (!isCorrect)
                 {
-                    string fuel = Util.AskForString("Fuel used");
-                    isCorrect = true;
-                    return new Car(registration, color, nrOfWheels, fuel);
+                    string vehicleType = Util.AskForString("Vehicle type");
+                    //Ask for all 
+                    string registration;
+                    string color;
+                    uint nrOfWheels;
+                     
+                    //Ask for specific types
+                    if (vehicleType.ToLower() == "car")
+                    {
+                        registration = Util.AskForString("Vehicle registration");
+                        color = Util.AskForString("Vehicle color");
+                        nrOfWheels = Util.AskForUInt("Number of wheels");
+                        string fuel = Util.AskForString("Fuel used");
+                        isCorrect = true;
+                        return new Car(registration, color, nrOfWheels, fuel);
+                    }
+                    else if (vehicleType.ToLower() == "bus")
+                    {
+                        registration = Util.AskForString("Vehicle registration");
+                        color = Util.AskForString("Vehicle color");
+                        nrOfWheels = Util.AskForUInt("Number of wheels");
+                        uint nrOfSeats = Util.AskForUInt("Number of seats");
+                        isCorrect = true;
+                        return new Bus(registration, color, nrOfWheels, nrOfSeats);
+                    }
+                    else if (vehicleType.ToLower() == "motorcycle")
+                    {
+                        registration = Util.AskForString("Vehicle registration");
+                        color = Util.AskForString("Vehicle color");
+                        nrOfWheels = Util.AskForUInt("Number of wheels");
+                        uint maxSpeed = Util.AskForUInt("Maximum speed");
+                        isCorrect = true;
+                        return new Motorcycle(registration, color, nrOfWheels, maxSpeed);
+                    }
+                    else if (vehicleType.ToLower() == "rv")
+                    {
+                        registration = Util.AskForString("Vehicle registration");
+                        color = Util.AskForString("Vehicle color");
+                        nrOfWheels = Util.AskForUInt("Number of wheels");
+                        uint length = Util.AskForUInt("Length");
+                        isCorrect = true;
+                        return new Rv(registration, color, nrOfWheels, length);
+                    }
+                    else if (vehicleType.ToLower() == "truck")
+                    {
+                        registration = Util.AskForString("Vehicle registration");
+                        color = Util.AskForString("Vehicle color");
+                        nrOfWheels = Util.AskForUInt("Number of wheels");
+                        uint capacity = Util.AskForUInt("Length");
+                        isCorrect = true;
+                        return new Truck(registration, color, nrOfWheels, capacity);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Please input a correct vehicle type.");
+                    }
                 }
-                else if (vehicleType.ToLower() == "bus")
-                {
-                    uint nrOfSeats = Util.AskForUInt("Number of seats");
-                    isCorrect = true;
-                    return new Bus(registration, color, nrOfWheels, nrOfSeats);
-                }
-                else if (vehicleType.ToLower() == "motorcycle")
-                {
-                    uint maxSpeed = Util.AskForUInt("Maximum speed");
-                    isCorrect = true;
-                    return new Motorcycle(registration, color, nrOfWheels, maxSpeed);
-                }
-                else if (vehicleType.ToLower() == "rv")
-                {
-                    uint length = Util.AskForUInt("Length");
-                    isCorrect = true;
-                    return new Rv(registration, color, nrOfWheels, length);
-                }
-                else if (vehicleType.ToLower() == "truck")
-                {
-                    uint capacity = Util.AskForUInt("Length");
-                    isCorrect = true;
-                    return new Truck(registration, color, nrOfWheels, capacity);
-                }
-                else
-                {
-                    Console.WriteLine("Please input a correct vehicle type.");
-                }
+                return null;
             }
-            return null;
-        }
 
-        private static (bool, Garage<Vehicle>?) GetGarage()
-        {
-            bool isMatched = false;
-            string input = Util.AskForString("Garage name");
 
-            foreach (var garage in allGarages)
+            (bool, Garage<Vehicle>?) GetGarage()
             {
-                if (garage.Name.ToLower() == input.ToLower()) 
+                bool isMatched = false;
+                PrintAllGarages();
+                string input = Util.AskForString("Garage name");
+
+                foreach (var garage in allGarages)
                 {
-                    isMatched = true;
-                    return (isMatched, garage);
-                };
+                    if (garage.Name.ToLower() == input.ToLower())
+                    {
+                        isMatched = true;
+                        return (isMatched, garage);
+                    };
+                }
+                return (isMatched, null);
             }
-            return (isMatched, null);   
+
         }
+        
 
     }
 }
