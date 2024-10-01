@@ -109,11 +109,67 @@ namespace GarageProject
 
         private static Vehicle CreateVehicle()
         {
-            string registration = Util.AskForString("Vehicle registration");
-            string color = Util.AskForString("Vehicle color");
-            uint nrOfWheels = Util.AskForUInt("Number of wheels");
+            ConsoleColor originalColor = Console.ForegroundColor;
+            bool isCorrect = false;
+            //Print out types and ask for which one it should be
+            List<string> vehicleTypes = new List<string>
+            {
+                "Car",
+                "Bus",
+                "Motorcycle",
+                "RV",
+                "Truck"
+            };
+            //Print this part in different color 
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.WriteLine("Here are all the vehicle types: ");
+            vehicleTypes.ForEach(v => Console.WriteLine(v));
+            Console.ForegroundColor = originalColor;
 
-            return new Vehicle(registration, color, nrOfWheels);
+            while (!isCorrect)
+            {
+                string vehicleType = Util.AskForString("Vehicle type");
+                //Ask for all 
+                string registration = Util.AskForString("Vehicle registration");
+                string color = Util.AskForString("Vehicle color");
+                uint nrOfWheels = Util.AskForUInt("Number of wheels");
+                //Ask for specific types
+                if (vehicleType.ToLower() == "car")
+                {
+                    string fuel = Util.AskForString("Fuel used");
+                    isCorrect = true;
+                    return new Car(registration, color, nrOfWheels, fuel);
+                }
+                else if (vehicleType.ToLower() == "bus")
+                {
+                    uint nrOfSeats = Util.AskForUInt("Number of seats");
+                    isCorrect = true;
+                    return new Bus(registration, color, nrOfWheels, nrOfSeats);
+                }
+                else if (vehicleType.ToLower() == "motorcycle")
+                {
+                    uint maxSpeed = Util.AskForUInt("Maximum speed");
+                    isCorrect = true;
+                    return new Motorcycle(registration, color, nrOfWheels, maxSpeed);
+                }
+                else if (vehicleType.ToLower() == "rv")
+                {
+                    uint length = Util.AskForUInt("Length");
+                    isCorrect = true;
+                    return new Rv(registration, color, nrOfWheels, length);
+                }
+                else if (vehicleType.ToLower() == "truck")
+                {
+                    uint capacity = Util.AskForUInt("Length");
+                    isCorrect = true;
+                    return new Truck(registration, color, nrOfWheels, capacity);
+                }
+                else
+                {
+                    Console.WriteLine("Please input a correct vehicle type.");
+                }
+            }
+            return null;
         }
 
         private static (bool, Garage<Vehicle>?) GetGarage()
