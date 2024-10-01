@@ -7,7 +7,7 @@ namespace GarageProject.Garages
     public class Garage<T> : IEnumerable<T> where T : Vehicle
     {
         private T[] vehicles;
-        //counter for the vihacles in the garage
+        //counter for the vehicles in the garage
         private uint count = 0;
 
         public string Name { get; private set; }
@@ -18,6 +18,11 @@ namespace GarageProject.Garages
             Name = name;
             Capacity = capacity;
             vehicles = new T[capacity];
+        }
+
+        public bool IsEmpty()
+        {
+            return count == 0;
         }
 
         internal bool AddVehicle(T vehicle)
@@ -44,10 +49,11 @@ namespace GarageProject.Garages
                     {
                         vehicles[j] = vehicles[j + 1];
                     }
+                    // Clear the last slot if needed (in case the garage was full)
                     if (vehicles[count - 1] != null) 
                     {
                         vehicles[count - 1] = null;
-                    }; // Clear the last slot
+                    };
                     count--;
                     
                     return true; 
@@ -55,6 +61,8 @@ namespace GarageProject.Garages
             }
             return false;
         }
+
+        //Search here ? 
 
         public IEnumerator<T> GetEnumerator()
         {
