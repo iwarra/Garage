@@ -8,7 +8,7 @@ namespace GarageProject.UI
             Console.WriteLine($"Message: {message}.");
         }
 
-        public static string GetInput()
+        public string GetInput()
         {
             return Console.ReadLine();
         }
