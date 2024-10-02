@@ -2,6 +2,12 @@
 {
     internal class MenuHelpers
     {
+        internal enum MenuState
+        {
+            MainMenu,
+            SearchMenu
+        }
+
         public const string Print = "1";
         public const string PrintByType = "2";
         public const string Add = "3";
