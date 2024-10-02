@@ -1,6 +1,7 @@
 ﻿using GarageProject.Garages;
 using GarageProject.UI;
 using GarageProject.Vehicles;
+using static GarageProject.MenuHelpers;
 
 namespace GarageProject
 {
@@ -16,63 +17,129 @@ namespace GarageProject
         static void Main()
         {
             bool isRunning = true;
+            MenuState currentState = MenuState.MainMenu;
             SeedData();
-            
-            do 
+
+            do
             {
-                MenuHelpers.ShowMainMenu();
+                // Display the menu based on the current state
+                switch (currentState)
+                {
+                    case MenuState.MainMenu:
+                        MenuHelpers.ShowMainMenu();
+                        break;
+                    case MenuState.SearchMenu:
+                        MenuHelpers.ShowSearchMenu();
+                        break;
+                }
+
                 string input = ui.GetInput().ToUpper();
 
-                switch (input)
+                switch (currentState)
                 {
-                    case MenuHelpers.Print:
-                        PrintAllVehicles();
+                    case MenuState.MainMenu:
+                        switch (input)
+                        {
+                            case MenuHelpers.Print:
+                                PrintAllVehicles();
+                                break;
+                            case MenuHelpers.PrintByType:
+                                PrintByType();
+                                break;
+                            case MenuHelpers.Add:
+                                AddVehicle();
+                                break;
+                            case MenuHelpers.Remove:
+                                RemoveVehicle();
+                                break;
+                            case MenuHelpers.Search:
+                                // Switch to search menu 
+                                currentState = MenuState.SearchMenu;
+                                break;
+                            case MenuHelpers.AddGarage:
+                                AddGarage(allGarages);
+                                break;
+                            case MenuHelpers.Quit:
+                                isRunning = false;
+                                break;
+                            default:
+                                Console.WriteLine("Invalid option, please try again.");
+                                break;
+                        }
                         break;
-                    case MenuHelpers.PrintByType:
-                        PrintByType();
-                        break;
-                    case MenuHelpers.Add:
-                       AddVehicle();
-                        break;
-                    case MenuHelpers.Remove:
-                        RemoveVehicle();
-                        break;
-                    case MenuHelpers.Search:
-                         //MenuHelpers.CloseMainMenu();
-                         MenuHelpers.ShowSearchMenu();
-                        break;
-                    case MenuHelpers.SearchByRegistration:
-                        SearchByRegistration();
-                        break;
-                    case MenuHelpers.SearchByProps:
-                        SearchByProps();
-                        break;
-                    case MenuHelpers.Exit:
-                        //MenuHelpers.CloseSearchMenu();
-                        //MenuHelpers.ShowMainMenu();
-                        break;
-                    case MenuHelpers.AddGarage:
-                        AddGarage(allGarages);
-                        break;
-                    case MenuHelpers.Quit:
-                        isRunning = false;
-                        break;
-                    default:
+
+                    case MenuState.SearchMenu:
+                        switch (input)
+                        {
+                            case MenuHelpers.SearchByRegistration:
+                                SearchByRegistration();
+                                break;
+                            case MenuHelpers.SearchByProps:
+                                SearchByProps();
+                                break;
+                            case MenuHelpers.Exit:
+                                // Switch back to the main menu 
+                                currentState = MenuState.MainMenu;
+                                break;
+                            default:
+                                Console.WriteLine("Invalid option, please try again.");
+                                break;
+                        }
                         break;
                 }
             }
             while (isRunning);
 
+            //do 
+            //{
+            //    MenuHelpers.ShowMainMenu();
+            //    string input = ui.GetInput().ToUpper();
+
+            //    switch (input)
+            //    {
+            //        case MenuHelpers.Print:
+            //            PrintAllVehicles();
+            //            break;
+            //        case MenuHelpers.PrintByType:
+            //            PrintByType();
+            //            break;
+            //        case MenuHelpers.Add:
+            //           AddVehicle();
+            //            break;
+            //        case MenuHelpers.Remove:
+            //            RemoveVehicle();
+            //            break;
+            //        case MenuHelpers.Search:
+            //             //MenuHelpers.CloseMainMenu();
+            //             MenuHelpers.ShowSearchMenu();
+            //            break;
+            //        case MenuHelpers.SearchByRegistration:
+            //            SearchByRegistration();
+            //            break;
+            //        case MenuHelpers.SearchByProps:
+            //            SearchByProps();
+            //            break;
+            //        case MenuHelpers.Exit:
+            //            //MenuHelpers.CloseSearchMenu();
+            //            //MenuHelpers.ShowMainMenu();
+            //            break;
+            //        case MenuHelpers.AddGarage:
+            //            AddGarage(allGarages);
+            //            break;
+            //        case MenuHelpers.Quit:
+            //            isRunning = false;
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+            //while (isRunning);
+
         }
 
-
-        //ToDo: Refactor the CreateVehicle
-        private static Vehicle CreateVehicle()
+        private static void PrintAllVehicleTypes()
         {
             ConsoleColor originalColor = Console.ForegroundColor;
-            bool isCorrect = false;
-            //Print out types and ask for which one it should be
-            //ToDo: Refactor the vehicle types logic
             List<string> vehicleTypes = new List<string>
             {
                 "Car",
@@ -86,6 +153,14 @@ namespace GarageProject
             Console.WriteLine("Here are all the vehicle types: ");
             vehicleTypes.ForEach(v => Console.WriteLine(v));
             Console.ForegroundColor = originalColor;
+        }
+
+
+        //ToDo: Refactor the CreateVehicle
+        private static Vehicle CreateVehicle()
+        {
+            bool isCorrect = false;
+            PrintAllVehicleTypes();
 
             while (!isCorrect)
             {
@@ -230,9 +305,19 @@ namespace GarageProject
         {
             PrintAllGarages();
             string garageName = Util.AskForString("Garage name");
+
+            Console.WriteLine(@"
+You can search by multiple properties. To skip a property, type ""none"".
+To search for all values of a property, type ""all"".
+______________________________________________________________");
             
             string color = Util.AskForString("Vehicle color");
-            uint nrOfWheels = Util.AskForUInt("Number of wheels");
+            ui.PrintMessage("Number of wheels");
+            var nrOfWheels = ui.GetInput();
+            PrintAllVehicleTypes();
+            string vehicleType = Util.AskForString("Vehicle type");
+            //Check user given input and call handler with valid props
+            //handler.SearchByProps();
         }
 
         private static void SearchByRegistration()
