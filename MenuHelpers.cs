@@ -21,14 +21,14 @@
                    $"\n{Quit}: Quit");
         }
 
-        public const char SearchByPlates = 'A';
-        public const char SearchByProps = 'B';
-        public const char Exit = 'C';
+        public const string SearchByRegistration = "A";
+        public const string SearchByProps = "B";
+        public const string Exit = "C";
         public static void ShowSearchMenu()
         {
 
             Console.WriteLine(
-                   $"\n{SearchByPlates}: Search by plates" +
+                   $"\n{SearchByRegistration}: Search by registration" +
                    $"\n{SearchByProps}: Search by other properties" +
                    $"\n{Exit}: Return to main menu");
         }
