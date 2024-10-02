@@ -70,7 +70,23 @@ namespace GarageProject.Garages
                 .ToDictionary(g => g.Key, g => g.Count());
         }
 
-        //Search here ? 
+        internal (bool isFound, string garageName) SearchByRegistration(string plateNumber)
+        {
+            bool isFound;
+            IEnumerable<Vehicle> vehicle = vehicles
+                .Where(v => v!= null)
+                .Where(v => v.RegistrationNr == plateNumber);
+            if (vehicle.Count() == 0) 
+            {
+                isFound = false;
+                return (isFound, null);
+            }
+            else
+            {
+                isFound = true;
+                return (isFound, Name);
+            }
+        }
 
         public IEnumerator<T> GetEnumerator()
         {

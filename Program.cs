@@ -1,7 +1,6 @@
 ﻿using GarageProject.Garages;
 using GarageProject.UI;
 using GarageProject.Vehicles;
-using System.Drawing;
 
 namespace GarageProject
 {
@@ -9,13 +8,15 @@ namespace GarageProject
     {
         //List of all garages as there can be multiple
         public static List<Garage<Vehicle>> allGarages = new List<Garage<Vehicle>>();
+        private static ConsoleUI ui = new ConsoleUI();
+        private static GarageHandler handler = new GarageHandler();
 
         //ToDo: make a separate main class that will contain the logic to reduce the code used here
         //Error handling
         static void Main()
         {
-             ConsoleUI ui = new ConsoleUI();
-             GarageHandler handler = new GarageHandler(); 
+             //ConsoleUI ui = new ConsoleUI();
+             //GarageHandler handler = new GarageHandler(); 
              bool isRunning = true;
 
             SeedData();
@@ -43,7 +44,16 @@ namespace GarageProject
                     //Add search
                     case MenuHelpers.Search:
                         MenuHelpers.ShowSearchMenu();
-                        SearchVehicles();
+                       // SearchVehicles();
+                        break;
+                    case MenuHelpers.SearchByRegistration:
+                        SearchByRegistration();
+                        break;
+                    case MenuHelpers.SearchByProps:
+                        SearchByProps();
+                        break;
+                    case MenuHelpers.Exit:
+                        //Return to main menu
                         break;
                     case MenuHelpers.AddGarage:
                         AddGarage(allGarages);
@@ -123,22 +133,6 @@ namespace GarageProject
                 } else Console.WriteLine("Please select an existing garage.");
             }
 
-            void SearchVehicles()
-            {
-                //Get input from user A, B or C
-                //Call a different function according to their choice
-
-                //Select a garage where you want to search
-                //PrintAllGarages();
-                string garageName = Util.AskForString("Garage name");
-                //What input means include all ?
-                string color = Util.AskForString("Vehicle color");
-                uint nrOfWheels = Util.AskForUInt("Number of wheels");
-
-                //Make a separate seasrch for just registration. Could be useful to see where a wehicle is parked
-                //string registration = Util.AskForString("Vehicle registration");
-
-            }
 
             //ToDo: Refactor the whole thing
             Vehicle CreateVehicle()
@@ -262,7 +256,42 @@ namespace GarageProject
 
         }
 
-        
+        void SearchVehicles()
+        {
+            //Get input from user A, B or C
+            //Call a different function according to their choice
 
+            //Select a garage where you want to search
+            //PrintAllGarages();
+            string garageName = Util.AskForString("Garage name");
+            //What input means include all ?
+            string color = Util.AskForString("Vehicle color");
+            uint nrOfWheels = Util.AskForUInt("Number of wheels");
+
+            //Make a separate seasrch for just registration. Could be useful to see where a wehicle is parked
+            //string registration = Util.AskForString("Vehicle registration");
+
+        }
+        private static void SearchByProps()
+        {
+            string garageName = Util.AskForString("Garage name");
+        }
+
+        private static void SearchByRegistration()
+        {
+            bool isMatched = false;
+            string garageName;
+            string registration = Util.AskForString("Plate number");
+            allGarages.ForEach(g => 
+            {
+                (isMatched, garageName) = handler.SearchByRegistration(registration, g);
+                if (isMatched && garageName != null)
+                {
+                    Console.WriteLine($"The vehicle with registration {registration} was found in {g.Name}.");
+                    return;
+                }
+            });
+            if (!isMatched) Console.WriteLine($"We couldn't find a vehicle with registration: {registration}");
+        }
     }
 }
