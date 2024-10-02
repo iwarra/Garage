@@ -42,6 +42,7 @@ namespace GarageProject
                         break;
                     //Add search
                     case MenuHelpers.Search:
+                        MenuHelpers.ShowSearchMenu();
                         SearchVehicles();
                         break;
                     case MenuHelpers.AddGarage:
@@ -124,14 +125,19 @@ namespace GarageProject
 
             void SearchVehicles()
             {
-                PrintAllGarages();
+                //Get input from user A, B or C
+                //Call a different function according to their choice
+
+                //Select a garage where you want to search
+                //PrintAllGarages();
                 string garageName = Util.AskForString("Garage name");
-                string registration = Util.AskForString("Vehicle registration");
+                //What input means include all ?
                 string color = Util.AskForString("Vehicle color");
                 uint nrOfWheels = Util.AskForUInt("Number of wheels");
 
-                //Search for all vehicles in the given garage
-                //If certain value is empty include all?
+                //Make a separate seasrch for just registration. Could be useful to see where a wehicle is parked
+                //string registration = Util.AskForString("Vehicle registration");
+
             }
 
             //ToDo: Refactor the whole thing
@@ -255,6 +261,7 @@ namespace GarageProject
             }
 
         }
+
         
 
     }
