@@ -4,11 +4,12 @@ namespace GarageProject.Garages
 {
     public class GarageHandler
     {
-        public void AddVehicle(Vehicle vehicle, Garage<Vehicle> garage)  
+        //Added a parameter to hide the messages for seed data
+        public void AddVehicle(Vehicle vehicle, Garage<Vehicle> garage, bool isSeedData = false)  
         {
             bool isAdded = garage.AddVehicle(vehicle);
-            if (isAdded) Console.WriteLine($"The vehicle was succesfully added.");
-            else Console.WriteLine($"Sorry, the garage is full."); 
+            if (isAdded && !isSeedData) Console.WriteLine($"The vehicle was succesfully added.");
+            else if (!isAdded && !isSeedData) Console.WriteLine($"Sorry, the garage is full."); 
         }
 
         public void RemoveVehicle(Garage<Vehicle> garage)

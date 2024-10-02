@@ -1,6 +1,7 @@
 ﻿using GarageProject.Garages;
 using GarageProject.UI;
 using GarageProject.Vehicles;
+using System.Drawing;
 
 namespace GarageProject
 {
@@ -9,13 +10,16 @@ namespace GarageProject
         //List of all garages as there can be multiple
         public static List<Garage<Vehicle>> allGarages = new List<Garage<Vehicle>>();
 
+        //ToDo: make a separate main class that will contain the logic to reduce the code used here
+        //Error handling
         static void Main()
         {
-            bool isRunning = true;
-            ConsoleUI ui = new ConsoleUI();
-            GarageHandler handler = new GarageHandler(); 
-            
+             ConsoleUI ui = new ConsoleUI();
+             GarageHandler handler = new GarageHandler(); 
+             bool isRunning = true;
 
+            SeedData();
+            
             do 
             {
                 MenuHelpers.ShowMainMenu();
@@ -229,6 +233,25 @@ namespace GarageProject
                     };
                 }
                 return (isMatched, null);
+            }
+
+            void SeedData()
+            {
+                //Create and add a garage so we have something to work with
+                Garage<Vehicle> garageToAddTo = new(10, "Centralen");
+                allGarages.Add(garageToAddTo);
+
+                //Create and add some wehicles
+                Car car1 = new("110023", "silver", 4, "electric");
+                Car car2 = new("AR0879", "black", 4, "gas");
+                Truck truck1 = new("TR-22345", "red", 8, 250);
+                List<Vehicle> vehicles =
+                [
+                    car1,
+                    car2,
+                    truck1
+                ];
+                vehicles.ForEach(v => handler.AddVehicle(v, garageToAddTo, true));
             }
 
         }
