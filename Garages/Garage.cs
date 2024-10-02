@@ -88,6 +88,20 @@ namespace GarageProject.Garages
             }
         }
 
+        internal (bool wasFound, List<Vehicle> vehiclesFound) SearchByProps(string color, uint nrOfWheels, string vehicleType)
+        {
+            //Check all params and search accordingly
+            IEnumerable<Vehicle> vehicle;
+            bool wasFound;
+            //If all arguments were specified
+            vehicle = vehicles
+                .Where(v => v != null)
+                .Where(v => v.Color.ToLower() == color.ToLower())
+                .Where(v => v.NrOfWheels == nrOfWheels)
+                .Where(v => v.GetType().Name.ToLower() == vehicleType.ToLower());
+
+        }
+
         public IEnumerator<T> GetEnumerator()
         {
             for (int i = 0; i < count; i++)

@@ -40,5 +40,10 @@ namespace GarageProject.Garages
         {
             return garage.SearchByRegistration(plateNumber);
         }
+
+        public (bool isFound, List<Vehicle> vehiclesFound) SearchByProps(string color, uint nrOfWheels, string vehicleType, Garage<Vehicle> garage)
+        {
+            return garage.SearchByProps(color, nrOfWheels, vehicleType);
+        }
     }
 }
