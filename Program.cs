@@ -303,21 +303,49 @@ namespace GarageProject
         }
         private static void SearchByProps()
         {
+            bool wasFound;
+            IEnumerable<Vehicle> vehiclesFound;
             PrintAllGarages();
             string garageName = Util.AskForString("Garage name");
+            Garage<Vehicle> selectedGarage = allGarages.Find(g => g.Name.Equals(garageName, StringComparison.OrdinalIgnoreCase));
 
             Console.WriteLine(@"
 You can search by multiple properties. To skip a property, type ""none"".
-To search for all values of a property, type ""all"".
 ______________________________________________________________");
             
             string color = Util.AskForString("Vehicle color");
-            ui.PrintMessage("Number of wheels");
+            Console.WriteLine("Number of wheels: ");
             var nrOfWheels = ui.GetInput();
             PrintAllVehicleTypes();
             string vehicleType = Util.AskForString("Vehicle type");
-            //Check user given input and call handler with valid props
-            //handler.SearchByProps();
+
+            if (nrOfWheels is String)
+            {
+                //if number of wheels is a string call the handler without it}
+                (wasFound , vehiclesFound) = handler.SearchByProps(color, vehicleType, selectedGarage); 
+                if (wasFound)
+                {
+                    Console.WriteLine("We found the following results:");
+                    foreach (var v in vehiclesFound)
+                    {
+                        Console.WriteLine($"Vehicle with registration {v.RegistrationNr}, color {v.Color} and of type {v.GetType().Name}");
+                    }
+                }
+                else Console.WriteLine("No match was found. Try again.");
+            }
+            else 
+            {
+                (wasFound, vehiclesFound) = handler.SearchByProps(color, vehicleType, selectedGarage, nrOfWheels);
+                if (wasFound)
+                {
+                    Console.WriteLine("We found the following results:");
+                    foreach (var v in vehiclesFound)
+                    {
+                        Console.WriteLine($"Vehicle with registration {v.RegistrationNr}, color {v.Color}, of type {v.GetType().Name} and with {v.NrOfWheels} wheels.");
+                    }
+                }
+                else Console.WriteLine("No match was found. Try again.");
+            }
         }
 
         private static void SearchByRegistration()

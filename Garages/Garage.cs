@@ -88,18 +88,31 @@ namespace GarageProject.Garages
             }
         }
 
-        internal (bool wasFound, List<Vehicle> vehiclesFound) SearchByProps(string color, uint nrOfWheels, string vehicleType)
+        internal (bool wasFound, IEnumerable<Vehicle> vehiclesFound) SearchByProps(string color, string vehicleType, string nrOfWheels = "0")
         {
-            //Check all params and search accordingly
-            IEnumerable<Vehicle> vehicle;
-            bool wasFound;
-            //If all arguments were specified
-            vehicle = vehicles
-                .Where(v => v != null)
-                .Where(v => v.Color.ToLower() == color.ToLower())
-                .Where(v => v.NrOfWheels == nrOfWheels)
-                .Where(v => v.GetType().Name.ToLower() == vehicleType.ToLower());
+            //Transform from string paramether to a uint we can use for filtering
+            uint numberOfWheels = 0;
+            bool isNrOfWheelsValid = uint.TryParse(nrOfWheels, out numberOfWheels);
 
+            bool wasFound = false;
+            IEnumerable<Vehicle> query = vehicles.Where(v => v != null);
+
+            // Apply color filter if specified
+            if (!string.Equals(color, "none", StringComparison.OrdinalIgnoreCase)) { }
+                query = query.Where(v => v.Color.Equals(color, StringComparison.OrdinalIgnoreCase));
+
+
+            // Apply vehicle type filter if specified
+            if (!string.Equals(vehicleType, "none", StringComparison.OrdinalIgnoreCase))
+                query = query.Where(v => v.GetType().Name.Equals(vehicleType, StringComparison.OrdinalIgnoreCase));
+
+
+            // Apply number of wheels filter if specified; checks that we got a number and that it's not 0
+            if (isNrOfWheelsValid && numberOfWheels != 0) query = query.Where(v => v.NrOfWheels == numberOfWheels);
+
+            wasFound = query.Count() > 0;
+
+            return (wasFound, query);
         }
 
         public IEnumerator<T> GetEnumerator()
