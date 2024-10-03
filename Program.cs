@@ -3,6 +3,7 @@ using GarageProject.UI;
 using GarageProject.Vehicles;
 using static GarageProject.MenuHelpers;
 
+
 namespace GarageProject
 {
     internal class Program
@@ -89,52 +90,6 @@ namespace GarageProject
                 }
             }
             while (isRunning);
-
-            //do 
-            //{
-            //    MenuHelpers.ShowMainMenu();
-            //    string input = ui.GetInput().ToUpper();
-
-            //    switch (input)
-            //    {
-            //        case MenuHelpers.Print:
-            //            PrintAllVehicles();
-            //            break;
-            //        case MenuHelpers.PrintByType:
-            //            PrintByType();
-            //            break;
-            //        case MenuHelpers.Add:
-            //           AddVehicle();
-            //            break;
-            //        case MenuHelpers.Remove:
-            //            RemoveVehicle();
-            //            break;
-            //        case MenuHelpers.Search:
-            //             //MenuHelpers.CloseMainMenu();
-            //             MenuHelpers.ShowSearchMenu();
-            //            break;
-            //        case MenuHelpers.SearchByRegistration:
-            //            SearchByRegistration();
-            //            break;
-            //        case MenuHelpers.SearchByProps:
-            //            SearchByProps();
-            //            break;
-            //        case MenuHelpers.Exit:
-            //            //MenuHelpers.CloseSearchMenu();
-            //            //MenuHelpers.ShowMainMenu();
-            //            break;
-            //        case MenuHelpers.AddGarage:
-            //            AddGarage(allGarages);
-            //            break;
-            //        case MenuHelpers.Quit:
-            //            isRunning = false;
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //}
-            //while (isRunning);
-
         }
 
         private static void PrintAllVehicleTypes()
@@ -252,6 +207,7 @@ namespace GarageProject
             if (selectedGarage.IsEmpty()) Console.WriteLine($"{selectedGarage.Name} garage is empty.");
             else handler.ListAllVehicles(selectedGarage);
         }
+
         private static void PrintByType()
         {
             var (isFound, selectedGarage) = GetGarage();
@@ -301,6 +257,7 @@ namespace GarageProject
             allGarages.ForEach(g => Console.WriteLine(g.Name));
             Console.ForegroundColor = originalColor;
         }
+
         private static void SearchByProps()
         {
             bool wasFound;
