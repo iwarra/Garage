@@ -1,8 +1,8 @@
 ﻿using GarageProject.Garages;
 using GarageProject.UI;
 using GarageProject.Vehicles;
+using Microsoft.Extensions.Configuration;
 using static GarageProject.MenuHelpers;
-
 
 namespace GarageProject
 {
@@ -17,6 +17,13 @@ namespace GarageProject
         //Error handling
         static void Main()
         {
+            IConfiguration config = new ConfigurationBuilder()
+            .SetBasePath(Environment.CurrentDirectory)
+            .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+            var capacity = config.GetSection("garage:capacity").Value;
+
+
             bool isRunning = true;
             MenuState currentState = MenuState.MainMenu;
             SeedData();
