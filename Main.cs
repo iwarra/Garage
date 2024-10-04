@@ -123,6 +123,15 @@ namespace GarageProject
         }
 
 
+        private static (string registration, string color, uint nrOfWheels) AskForBasicVehicleDetails()
+        {
+            string registration = Util.AskForString("Vehicle registration");
+            string color = Util.AskForString("Vehicle color");
+            uint nrOfWheels = Util.AskForUInt("Number of wheels");
+
+            return (registration, color, nrOfWheels);
+        }
+
         //ToDo: Refactor the CreateVehicle
         private static Vehicle CreateVehicle()
         {
@@ -131,59 +140,34 @@ namespace GarageProject
 
             while (!isCorrect)
             {
-                string vehicleType = Util.AskForString("Vehicle type");
-                string registration;
-                string color;
-                uint nrOfWheels;
+                string vehicleType = Util.AskForString("Vehicle type").ToLower();
+                (string registration, string color, uint nrOfWheels) = AskForBasicVehicleDetails();
 
-                if (vehicleType.ToLower() == "car")
+                switch (vehicleType)
                 {
-                    registration = Util.AskForString("Vehicle registration");
-                    color = Util.AskForString("Vehicle color");
-                    nrOfWheels = Util.AskForUInt("Number of wheels");
-                    string fuel = Util.AskForString("Fuel used");
-                    isCorrect = true;
-                    return new Car(registration, color, nrOfWheels, fuel);
-                }
-                else if (vehicleType.ToLower() == "bus")
-                {
-                    registration = Util.AskForString("Vehicle registration");
-                    color = Util.AskForString("Vehicle color");
-                    nrOfWheels = Util.AskForUInt("Number of wheels");
-                    uint nrOfSeats = Util.AskForUInt("Number of seats");
-                    isCorrect = true;
-                    return new Bus(registration, color, nrOfWheels, nrOfSeats);
-                }
-                else if (vehicleType.ToLower() == "motorcycle")
-                {
-                    registration = Util.AskForString("Vehicle registration");
-                    color = Util.AskForString("Vehicle color");
-                    nrOfWheels = Util.AskForUInt("Number of wheels");
-                    uint maxSpeed = Util.AskForUInt("Maximum speed");
-                    isCorrect = true;
-                    return new Motorcycle(registration, color, nrOfWheels, maxSpeed);
-                }
-                else if (vehicleType.ToLower() == "rv")
-                {
-                    registration = Util.AskForString("Vehicle registration");
-                    color = Util.AskForString("Vehicle color");
-                    nrOfWheels = Util.AskForUInt("Number of wheels");
-                    uint length = Util.AskForUInt("Length");
-                    isCorrect = true;
-                    return new Rv(registration, color, nrOfWheels, length);
-                }
-                else if (vehicleType.ToLower() == "truck")
-                {
-                    registration = Util.AskForString("Vehicle registration");
-                    color = Util.AskForString("Vehicle color");
-                    nrOfWheels = Util.AskForUInt("Number of wheels");
-                    uint capacity = Util.AskForUInt("Length");
-                    isCorrect = true;
-                    return new Truck(registration, color, nrOfWheels, capacity);
-                }
-                else
-                {
-                    Console.WriteLine("Please input a correct vehicle type.");
+                    case "car":
+                        string fuel = Util.AskForString("Fuel used");
+                        isCorrect = true;
+                        return new Car(registration, color, nrOfWheels, fuel);
+                    case "bus":
+                        uint nrOfSeats = Util.AskForUInt("Number of seats");
+                        isCorrect = true;
+                        return new Bus(registration, color, nrOfWheels, nrOfSeats);
+                    case "motorcycle":
+                        uint maxSpeed = Util.AskForUInt("Maximum speed");
+                        isCorrect = true;
+                        return new Motorcycle(registration, color, nrOfWheels, maxSpeed);
+                    case "rv":
+                        uint length = Util.AskForUInt("Length");
+                        isCorrect = true;
+                        return new Rv(registration, color, nrOfWheels, length);
+                    case "truck":
+                        uint capacity = Util.AskForUInt("Capacity");
+                        isCorrect = true;
+                        return new Truck(registration, color, nrOfWheels, capacity);
+                    default:
+                        Console.WriteLine("Please input a correct vehicle type.");
+                        break;
                 }
             }
             return null;
@@ -193,17 +177,15 @@ namespace GarageProject
         {
             Vehicle VehicleToAdd = CreateVehicle();
             var (isMatched, selectedGarage) = GetGarage();
-            if (isMatched && selectedGarage != null)
-            {
-                handler.AddVehicle(VehicleToAdd, selectedGarage);
-            }
+            if (isMatched) handler.AddVehicle(VehicleToAdd, selectedGarage);
             else Console.WriteLine("Sorry, we couldn't find the garage. Please try again.");
         }
 
         private static void RemoveVehicle()
         {
             var (isMatched, selectedGarage) = GetGarage();
-            if (isMatched && selectedGarage != null) handler.RemoveVehicle(selectedGarage);
+            if (isMatched) handler.RemoveVehicle(selectedGarage);
+            else Console.WriteLine("Sorry, we couldn't find the garage. Please try again.");
         }
 
         private static void PrintAllVehicles()
@@ -241,7 +223,7 @@ namespace GarageProject
 
             Garage<Vehicle> garageToAdd = new Garage<Vehicle>(capacity, garageName);
             allGarages.Add(garageToAdd);
-            Console.WriteLine(allGarages.Count);
+            Console.WriteLine($"{garageName} was successfully added.");
         }
 
         private static (bool, Garage<Vehicle>?) GetGarage()
@@ -263,6 +245,7 @@ namespace GarageProject
 
         private static void PrintAllGarages()
         {
+            //Switching color to print the garage list
             ConsoleColor originalColor = Console.ForegroundColor;
             Console.ForegroundColor = ConsoleColor.DarkYellow;
             Console.WriteLine("Here is a list of all the garages: ");
@@ -290,7 +273,7 @@ ______________________________________________________________");
 
             if (nrOfWheels is String)
             {
-                //if number of wheels is a string call the handler without it}
+                //if number of wheels is a string (none) call the handler without it
                 (wasFound, vehiclesFound) = handler.SearchByProps(color, vehicleType, selectedGarage);
                 if (wasFound)
                 {
@@ -321,11 +304,11 @@ ______________________________________________________________");
         {
             bool isMatched = false;
             string garageName;
-            string registration = Util.AskForString("Plate number");
+            string registration = Util.AskForString("Registration");
             allGarages.ForEach(g =>
             {
                 (isMatched, garageName) = handler.SearchByRegistration(registration, g);
-                if (isMatched && garageName != null)
+                if (isMatched)
                 {
                     Console.WriteLine($"The vehicle with registration {registration} was found in {g.Name}.");
                     return;
@@ -347,8 +330,8 @@ ______________________________________________________________");
             List<Vehicle> vehicles =
             [
                 car1,
-                    car2,
-                    truck1
+                car2,
+                truck1
             ];
             vehicles.ForEach(v => handler.AddVehicle(v, garageToAddTo, true));
         }
