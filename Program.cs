@@ -17,11 +17,22 @@ namespace GarageProject
         //Error handling
         static void Main()
         {
+            //Adding config to access garage capacity from there
             IConfiguration config = new ConfigurationBuilder()
             .SetBasePath(Environment.CurrentDirectory)
             .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
             .Build();
             var capacity = config.GetSection("garage:capacity").Value;
+
+            //A method to get capacity from config file if needed (Where should this be placed?)
+            //public static int GetGarageCapacity(this IConfiguration config)
+            //{
+            //    var section = config.GetSection("garage:capacity");
+
+            //    return int.TryParse(section.Value, out int result) ? result : 0;
+            //}
+            //Would be called like this here
+            //var capacity = config.GetGarageCapacity();
 
 
             bool isRunning = true;
