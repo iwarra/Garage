@@ -11,7 +11,6 @@ namespace GarageProject
             Main main = new Main();
             try
             {
-                //Employee emp = new Employee(null, 25);
                 main.Run();
             }
             catch (ArgumentNullException ex)
